@@ -1,3 +1,4 @@
+//Tác phẩm liên quan
 window.addEventListener("DOMContentLoaded", () => { //Đảm bảo mã chỉ chạy khi toàn bộ nội dung DOM đã được tải.
     const slider = document.getElementById("slider");
     let slides = slider.querySelectorAll(".info-work");
