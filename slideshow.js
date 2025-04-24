@@ -1,4 +1,4 @@
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", () => { //Đảm bảo mã chỉ chạy khi toàn bộ nội dung DOM đã được tải.
     const slider = document.getElementById("slider");
     let slides = slider.querySelectorAll(".info-work");
     const visibleSlides = 4;
@@ -114,11 +114,11 @@ const length = imgs.length;
 let current = 0;
 
 function nextSlide() {
-    if (!imgs.length) return; // Kiểm tra nếu không có ảnh nào
+    if (!imgs.length) return; 
 
-    let width = imgs[0].offsetWidth; // Lấy chiều rộng ảnh đầu tiên
+    let width = imgs[0].offsetWidth; 
 
-    current = (current + 1) % length; // Quay lại ảnh đầu khi hết danh sách
+    current = (current + 1) % length; 
 
     listImage.style.transform = `translateX(${-width * current}px)`;
     listImage.style.transition = "transform 0.5s ease-in-out"; 
@@ -137,9 +137,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const visibleSlides = 4;
     const slideWidth = slides[0].offsetWidth;
 
-    let currentIndex = visibleSlides; // Start from first "real" slide
+    let currentIndex = visibleSlides; 
 
-    // Clone last 4 -> prepend, first 4 -> append
     for (let i = slides.length - visibleSlides; i < slides.length; i++) {
         let clone = slides[i].cloneNode(true);
         clone.classList.add("clone");

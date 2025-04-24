@@ -79,7 +79,7 @@
 *{
     margin:0px;
     padding: 0px;
-    box-sizing: border-box;
+    box-sizing: border-box; /*khi padding và margin không thay đổi kích thước*/
     font-family: Arial, Helvetica, sans-serif;
     
 }
@@ -92,7 +92,7 @@
     position: fixed; /* Cố định ontop */
     top: 0; /* Dính vào mép trên */
     left: 0;
-    z-index: 1001;
+    z-index: 1001;/*z-index càng cao thì độ ưu tiên càng lớn*/
     
 }
 .ontop1{
@@ -107,7 +107,7 @@
     left: 0;
     width: 100%;
     background-color: rgba(255, 255, 255, 0.5);;
-    display: flex;
+    display: flex; /*giúp sắp xếp căn chỉnh dễ dàng bên trong theo hàng ngang hoặc dọc*/
     align-items: center;
     padding: 0 0px;
     justify-content: center;
@@ -135,11 +135,11 @@
     list-style: none;
     display: flex;
     align-items: center;
-    justify-content: center;  
+    justify-content: center;/* Đẩy các phần tử ra giữa theo chiều ngang theo trục x,yy*/
 }
 
 #nav li {
-    position: relative;
+    position: relative;/*dùng để định vị lại phần tử so với vị trí gốc ban đầu của nó trong tài liệu*/
 }
 
 #nav > li {
@@ -216,7 +216,7 @@
     padding: 10px;
     font-size: 14px;
     width: 160px;
-    background: transparent;
+    background: transparent;/*màu nền sẽ trong suốtsuốt*/
 }
 
 /* Nút kính lúp */

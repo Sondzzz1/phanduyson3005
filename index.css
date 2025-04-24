@@ -11,8 +11,8 @@
     padding: 9px 0;
     font-size: 14px;
     width: 100%;
-    position: fixed; /* Cố định ontop */
-    top: 0; /* Dính vào mép trên */
+    position: fixed; 
+    top: 0; 
     left: 0;
     z-index: 1001;
     
@@ -22,10 +22,10 @@
     width: 65%;
     margin-left: 86px;
 }
-/* Đây là phần header phần đầu của giao diện chương trình */
+
 #header {
     position: fixed;  
-    top: 35px; /* Đẩy header xuống dưới phần ontop */
+    top: 35px; 
     left: 0;
     width: 100%;
     background-color: rgba(255, 255, 255, 0.5);
@@ -33,11 +33,11 @@
     align-items: center;
     padding: 0 0px;
     justify-content: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Thêm bóng đổ nhẹ */
-    z-index: 1000; /* Đảm bảo header nằm dưới ontop */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000; 
 }
 #main {
-    padding-top: 145px; /* Điều chỉnh theo chiều cao của .ontop và #header */
+    padding-top: 145px; 
 }
 .menu-toggle {
     display: none;
@@ -499,7 +499,7 @@ body {
 }
 
 .feedback-slide {
-    flex-shrink: 0;
+    flex-shrink: 0;/*không cho phép co lại khi phần tử thiếu*/
     display: flex;
     align-items: center;
     justify-content: center;
@@ -507,7 +507,7 @@ body {
     gap: 30px;
     box-sizing: border-box;
     width: 100%;
-    flex: 0 0 100%;
+    flex: 0 0 100%;/*Giữ đúng kích thước là 100% của container flex-grow:0, flex-shrink: 0, flex-basis: 100%*/
 }
 
 .feedback-image {

@@ -1,4 +1,6 @@
-
+//Được gọi khi người dùng nhấn nút "Thêm vào giỏ".
+//Truy xuất thông tin sản phẩm qua data- attribute (data-id, data-name,...).
+//Gọi addToCart(item) để xử lý giỏ hàng.
 function addToCartFromButton(button) {
     const productContainer = button.closest('.product-details');
     const quantityInput = productContainer.querySelector('.quantity-input');
@@ -15,7 +17,17 @@ function addToCartFromButton(button) {
     addToCart(item);
 }
 
+//localStorage là một bộ nhớ lưu trữ cục bộ (local) của trình duyệt web, 
+//dùng để lưu dữ liệu trực tiếp trên máy của người dùng — và giữ lại cả khi người dùng tắt trình duyệt
+// hoặc tắt máy.
 
+
+//Lấy giỏ hàng từ localStorage.
+//Nếu có rồi:
+//Kiểm tra xem sản phẩm đã tồn tại chưa
+//Nếu có, cộng thêm số lượng.
+//Nếu chưa, thêm sản phẩm mới.
+//Sau đó cập nhật localStorage và gọi lại LoadData() để render lại giao diện.
 function addToCart(item) {
     var list;
     if (localStorage.getItem('cart') == null) {
@@ -40,13 +52,16 @@ function addToCart(item) {
     capNhatSoLuongGioHang();
 }
 
+
+
+
 var list = JSON.parse(localStorage.getItem('cart'));
 function LoadData() {
-    var list = JSON.parse(localStorage.getItem('cart')) || [];
-    var str = "";
-    var total = 0;
-    for (let x of list) {
-        total += x.price * x.quantity;
+    var list = JSON.parse(localStorage.getItem('cart')) || [];//Lấy dữ liệu giỏ hàng từ localStorage theo key "cart".
+    var str = "";//Biến str dùng để chứa HTML tạo ra từ dữ liệu sản phẩm, để gắn vào bảng giỏ hàng.
+    var total = 0;//Biến total để tính tổng giá trị giỏ hàng.
+    for (let x of list) { //Lặp qua từng sản phẩm x trong giỏ hàng.
+        total += x.price * x.quantity;//Cộng dồn giá sản phẩm nhân với số lượng vào tổng tiền.
         str += `<tr>
     <td>
         <i onclick="Xoa('${x.id}')" class="ti-trash" style="font-size:18px;color:red;cursor:pointer;" title="Xóa sản phẩm"></i>
@@ -63,33 +78,33 @@ function LoadData() {
 </tr>`;
 
     }
-    document.getElementById("listCart").innerHTML = str;
-    document.getElementById("spTong").innerText = total.toLocaleString() + "₫";
-    document.getElementById("tTong").innerText = total.toLocaleString() + "₫";
+    document.getElementById("listCart").innerHTML = str;//Gán toàn bộ HTML vừa tạo (str) vào phần tử có id="listCart" (tức là bảng giỏ hàng).
+    document.getElementById("spTong").innerText = total.toLocaleString() + "₫";//Gán tổng tiền (total) vào phần tử hiển thị tổng tiền sản phẩm (có id="spTong")
+    document.getElementById("tTong").innerText = total.toLocaleString() + "₫";//Gán tổng tiền vào phần tổng thanh toán (có id="tTong").
     capNhatSoLuongGioHang(); // cập nhật số hiển thị ở icon
 }
 
 function Xoa(id) {
     if (confirm("🗑️ Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng không?")) {
-        var list = JSON.parse(localStorage.getItem('cart')) || [];
-        list = list.filter(item => item.id !== id);
-        localStorage.setItem('cart', JSON.stringify(list));
+        var list = JSON.parse(localStorage.getItem('cart')) || [];//Lấy dữ liệu giỏ hàng từ localStorage, nơi lưu trữ dữ liệu trên trình duyệt.
+        list = list.filter(item => item.id !== id);//loại bỏ các sp có id khác với id cần xóa
+        localStorage.setItem('cart', JSON.stringify(list));//lưu lại giỏ hàng đã xóa sp vào localSlocalS
         LoadData(); // cập nhật lại bảng sau khi xóa
     }
 }
 function Giam(id) {
     var list = JSON.parse(localStorage.getItem('cart')) || [];
-    var item = list.find(x => x.id == id);
-    if (item && item.quantity > 1) {
+    var item = list.find(x => x.id == id);//tìm sản phẩm giỏ hàng theo id
+    if (item && item.quantity > 1) {//kiểm tra xem sp có tồn tại và số lượng lớn hơn 11
         item.quantity -= 1;
     }
-    localStorage.setItem('cart', JSON.stringify(list));
+    localStorage.setItem('cart', JSON.stringify(list));//lưu lại giỏ hàng đã giảm số lượng sp vào local
     LoadData();
 }
 
 function Tang(id) {
     var list = JSON.parse(localStorage.getItem('cart')) || [];
-    var item = list.find(x => x.id == id);
+    var item = list.find(x => x.id == id);//tìm sản phẩm giỏ hàng theo id
     if (item) {
         item.quantity += 1;
     }
@@ -149,12 +164,12 @@ function themVaoGioHang(maSanPham) {
 
 // Cập nhật số lượng hiển thị
 function capNhatSoLuongGioHang() {
-    let list = JSON.parse(localStorage.getItem('cart')) || [];
-    let tongSoLuong = list.reduce((tong, sp) => tong + sp.quantity, 0);
-    let el = document.querySelector(".cart-count");
+    let list = JSON.parse(localStorage.getItem('cart')) || [];//Lấy giỏ hàng từ localStorage, nếu chưa có thì tạo mảng rỗng.
+    let tongSoLuong = list.reduce((tong, sp) => tong + sp.quantity, 0);//Tính tổng số lượng sản phẩm trong giỏ hàng lặp qua từng sản phẩm và cộng dồn biến tong.
+    let el = document.querySelector(".cart-count");//tìm phần tử class cart-count để hiển thị số lượnglượng
     if (el) {
         el.textContent = tongSoLuong;
-    }
+    }       
 }
 
 
@@ -171,24 +186,23 @@ function ThanhToan() {
     window.location.href = "ThanhToan.html";
 }
 
-
 // Lấy sản phẩm từ bảng giỏ hàng
 function getCartItems() {
-    const rows = document.querySelectorAll("#listCart tr");
-    let items = [];
+    const rows = document.querySelectorAll("#listCart tr");//lấy tất cả các hàng trong bảng giỏ hàng
+    let items = [];//Khởi tạo một mảng rỗng để chứa các sản phẩm sau khi lấy thông tin.
 
-    rows.forEach(row => {
-        const ten = row.querySelector(".ten-sp")?.innerText || "";
+    rows.forEach(row => { //Lặp qua từng dòng sản phẩm (<tr>) trong bảng.
+        const ten = row.querySelector(".ten-sp")?.innerText || ""; //Dấu ?. là optional chaining: Nếu không tìm thấy thì không lỗi mà trả về undefined.
         const gia = row.querySelector(".gia-sp")?.innerText || "0";
-        const soLuong = row.querySelector(".sl-sp input")?.value || 1;
-
+        const soLuong = row.querySelector(".sl-sp input")?.value || 1;//Lấy giá trị trong ô input số lượng nằm trong .sl-sp.
+        //thêm sản phẩm vào mảng iteam  
         items.push({
             ten: ten,
+            //parseInt(...): chuyển chuỗi thành số nguyên.
             gia: parseInt(gia.replace(/[^\d]/g, "")), // bỏ ký tự ₫
             soLuong: parseInt(soLuong),
         });
     });
-
     return items;
 }
 function ThanhToan() {
