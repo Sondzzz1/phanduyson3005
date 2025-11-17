@@ -1,0 +1,677 @@
+/* ==== Cấu trúc chung ==== */
+body {
+    margin: 0;
+    font-family: "Segoe UI", sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    width: 100%;
+}
+
+/* ==== Sidebar ==== */
+.sidebar {
+    width: 230px;
+    height: 100vh;
+    background: #ff7b00;
+    position: fixed;
+    top: 0;
+    left: 0;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+}
+.sidebar h2 {
+    text-align: center;
+    padding: 20px 0;
+    font-size: 22px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.sidebar ul li {
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    cursor: pointer;
+    transition: 0.3s;
+}
+.sidebar ul li i { margin-right: 10px; font-size: 18px; }
+.sidebar ul li:hover,
+.sidebar ul li.active { background: #ff974f; border-radius: 8px 0 0 8px; }
+
+/* ==== Nội dung ==== */
+.content {
+    margin-left: 230px;
+    padding: 20px;
+}
+
+/* ==== Thanh trên cùng ==== */
+.topbar {
+    background: #fff;
+    padding: 12px 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.left { display: flex; align-items: center; gap: 10px; }
+.search-box {
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+.right i { margin: 0 8px; cursor: pointer; }
+
+/* ==== Ẩn ==== */
+.hidden { 
+    display: none; 
+}
+
+/* Các trang chức năng */
+.page {
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    margin-top: 20px;
+    width: 100%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
+}
+
+
+
+/* Tiêu đề */
+.page h4 {
+    color: #ff7b00;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Nút thêm/tạo */
+.add-btn {
+    background: #ff7b00;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-bottom: 18px;
+}
+.add-btn:hover {
+    background: #e36f00;
+}
+
+/* ==== POPUP FORM CHUNG (MODAL) ==== */
+.modal {
+    /* 💥 SỬA LỖI CHÍNH: Đảm bảo nó được ẩn ngay từ đầu */
+    display: none; 
+    
+    position: fixed; 
+    
+    /* 💥 SỬA LỖI CĂN GIỮA: Tăng Z-INDEX để nó nằm trên Sidebar */
+    z-index: 9999; /* Đảm bảo modal cao hơn mọi thứ (sidebar) */
+    
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%;
+    
+    background-color: rgba(0,0,0,0.6); 
+    backdrop-filter: blur(4px); 
+    
+    /* Cấu trúc căn giữa bằng Flexbox (Chỉ kích hoạt khi class 'show' được thêm vào) */
+    justify-content: center; /* Căn nội dung (modal-content) ra giữa ngang */
+    align-items: center; /* Căn nội dung (modal-content) ra giữa dọc */
+    overflow-y: auto; 
+}
+.modal.show {
+    /* PHẦN QUAN TRỌNG: Chỉ hiện khi có class 'show' */
+    display: flex; 
+}
+
+/* Các thuộc tính khác của modal-content, nút bấm KHÔNG CẦN SỬA, giữ nguyên như bạn đã cập nhật (có màu xanh lá và viền đỏ) */
+
+.modal-content {
+    background: #fff;
+    padding: 30px 35px;
+    border-radius: 14px;
+    width: 90%; 
+    max-width: 550px; 
+    max-height: 90vh; 
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3); 
+    position: relative;
+    animation: fadeIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; 
+    margin: 20px 20px; 
+}
+
+/* Hiệu ứng hiển thị (Giữ nguyên, nhưng tôi đã điều chỉnh tốc độ trong modal-content) */
+@keyframes fadeIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Nút đóng (Giữ nguyên) */
+.close {
+    position: absolute;
+    top: 12px;
+    right: 18px;
+    font-size: 24px; /* Tăng kích thước nút đóng */
+    color: #999;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.close:hover {
+    color: #ff7b00;
+    transform: rotate(90deg); /* Thêm hiệu ứng xoay nhẹ */
+}
+
+/* Form nhập (Giữ nguyên) */
+.modal-content label {
+    display: block;
+    font-weight: 600;
+    margin-top: 10px;
+    color: #333;
+}
+.modal-content input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: border 0.2s;
+}
+.modal-content input:focus {
+    border-color: #ff7b00;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(255, 123, 0, 0.2); /* Thêm bóng khi focus */
+}
+
+/* Nút trong popup */
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 25px; /* Tăng khoảng cách trên */
+}
+.modal-buttons button {
+    flex: 1;
+    padding: 12px 0; /* Tăng kích thước nút */
+    border-radius: 8px;
+    border: none;
+    font-weight: 700; /* Tăng độ đậm của chữ */
+    cursor: pointer;
+    transition: 0.3s;
+    text-transform: uppercase; /* Chuyển chữ hoa */
+    letter-spacing: 0.5px;
+}
+
+/* Nút LƯU - Màu Xanh Lá Cây/Thành Công */
+.modal-buttons button:first-child {
+    background: #008000; /* Xanh lá cây đậm */
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 128, 0, 0.3);
+}
+.modal-buttons button:first-child:hover {
+    background: #006400; /* Xanh đậm hơn khi hover */
+    transform: translateY(-2px);
+}
+
+/* Nút HỦY - Màu Xám/Viền Đỏ */
+.modal-buttons .cancel {
+    background: #f0f0f0; /* Nền xám nhạt */
+    color: #333;
+    border: 1px solid #e74c3c; /* Viền màu đỏ */
+    box-shadow: none;
+}
+.modal-buttons .cancel:hover {
+    background: #e74c3c; /* Nền đỏ khi hover */
+    color: white;
+    transform: translateY(-2px);
+    border-color: #e74c3c;
+}
+
+/* ==== Trang chủ ==== */
+#home {
+    background: #fff;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    margin-top: 20px;
+}
+#home .header h4 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #333;
+}
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+}
+.card {
+    text-align: center;
+    border-radius: 10px;
+    padding: 20px;
+    color: #fff;
+    transition: 0.3s;
+}
+.card:hover { transform: translateY(-4px); }
+.bg-primary { background: #ff7b00; }
+.bg-success { background: #28a745; }
+.bg-warning { background: #ffc107; color: #333; }
+.bg-danger { background: #dc3545; }
+
+.block {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+.activity div { padding: 8px 0; border-bottom: 1px solid #eee; color: #555; }
+.activity div i { color: #ff7b00; margin-right: 8px; }
+.stats {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.stat {
+    flex: 1;
+    background: #fff5eb;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    min-width: 180px;
+}
+.stat h3 { color: #ff7b00; margin-top: 5px; }
+
+#ghichu textarea {
+    width: 100%;
+    height: 100px;
+    border-radius: 8px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    outline: none;
+    resize: none;
+}
+#ghichu textarea:focus { border-color: #ff7b00; }
+
+
+/* ===== Quản lý Tranh (Cũ) ===== */
+.art-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.art-header h4 {
+    font-size: 18px;
+    color: #ff6600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.art-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.art-table th {
+    background-color: #ff6600;
+    color: white;
+    text-align: left;
+    padding: 10px;
+}
+
+.art-table td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.art-table img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+.art-table button {
+    background: transparent;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 5px 8px;
+    transition: 0.2s;
+}
+.art-table button:hover {
+    background: #ffecd9;
+}
+
+
+/* ==== TRANG ĐƠN HÀNG ==== */
+/* Header trang */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Bộ lọc */
+.filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 15px 0 10px;
+    flex-wrap: wrap;
+}
+.filter-item label {
+    margin-right: 5px;
+    font-weight: 500;
+}
+.filter-item input, .filter-item select {
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    outline: none;
+}
+
+
+/* phần tạo đơn hàng */
+
+/* Nút tạo hóa đơn */
+.btn-create {
+    background-color: #ff7b00;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px; 
+    font-weight: 600;
+    transition: 0.3s;
+    box-shadow: 0 3px 6px rgba(255, 123, 0, 0.2);
+}
+.btn-create:hover {
+    background-color: #ff974f;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(255, 123, 0, 0.3);
+}
+.btn-create i {
+    font-size: 16px;
+}
+
+/* Trạng thái */
+.status {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+}
+.status.pending { background: #f39c12; }
+.status.shipped { background: #3498db; }
+.status.success { background: #2ecc71; }
+.status.canceled { background: #e74c3c; }
+
+/* Bảng đơn hàng và bảng chung có style*/
+.table-container {
+    overflow-x: auto;
+}
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.styled-table th, .styled-table td {
+    text-align: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+.styled-table th {
+    background: #ff7b00;
+    color: #fff;
+}
+.styled-table tr:hover {
+    background: #fff4e5;
+}
+.styled-table img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+.styled-table button {
+    background: transparent;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 5px 8px;
+    transition: 0.2s;
+}
+.styled-table button:hover {
+    background: #ffecd9;
+}
+
+/* ==== TRANG KHÁCH HÀNG ==== */
+
+/* ===== QUẢN LÝ KHÁCH HÀNG ===== */
+.customer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.customer-header h4 {
+    font-size: 18px;
+    color: #ff6600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+}
+
+.customer-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.customer-table th,
+.customer-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.customer-table th {
+    background-color: #ff6600;
+    color: #fff;
+    font-weight: 600;
+}
+
+.customer-table tr:hover {
+    background-color: #fff5ec;
+    transition: 0.2s;
+}
+
+.edit-btn,
+.delete-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 8px;
+    transition: color 0.2s;
+}
+
+.edit-btn:hover {
+    color: #007bff;
+}
+
+.delete-btn:hover {
+    color: #ff3333;
+}
+
+/* Giúp bảng co giãn tự nhiên, không bị tràn */
+.customer-table th:nth-child(1) { width: 25%; }
+.customer-table th:nth-child(2) { width: 20%; }
+.customer-table th:nth-child(3) { width: 25%; }
+.customer-table th:nth-child(4) { width: 20%; }
+.customer-table th:nth-child(5) { width: 10%; }
+
+/* ==== CSS RIÊNG CHO CÁC FORM CÓ NHIỀU CỘT (NHƯ KHÁCH HÀNG) ==== */
+.form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 10px; 
+}
+
+.form-group {
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+}
+
+/* Đảm bảo input bên trong form-group có chiều rộng đúng */
+.form-group input {
+    width: 100%;
+    box-sizing: border-box; 
+}
+
+/* ===== BẢNG KHO (Áp dụng chung)===== */
+.warehouse-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.warehouse-table th, .warehouse-table td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.warehouse-table th {
+    background: #ff7b00; /* Thay đổi từ #f4f4f4 để đồng bộ với các bảng khác */
+    color: #fff;
+}
+
+
+
+
+/* ==== CSS TINH CHỈNH TRANG BÁO CÁO (REPORT) ==== */
+.report-filter {
+    /* Đảm bảo nút "Xem báo cáo" nằm ngang với các bộ lọc */
+    align-items: flex-end; 
+    padding: 15px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+}
+
+.report-filter .filter-item {
+    min-width: 150px; /* Giúp các trường lọc không quá hẹp */
+}
+
+.report-summary {
+    margin-top: 0;
+    margin-bottom: 25px; /* Khoảng cách với phần chi tiết */
+}
+
+.report-detail {
+    padding: 25px;
+}
+
+/* Khu vực biểu đồ */
+#reportChart {
+    width: 100%;
+    max-height: 300px;
+}
+
+
+
+/* ==== CSS RIÊNG CHO TRANG CÀI ĐẶT (SETTINGS) ==== */
+.form-group-setting {
+    margin-bottom: 20px;
+    padding: 10px;
+    border-left: 3px solid #ff7b00; /* Đường viền nổi bật */
+    background: #fcfcfc;
+    border-radius: 4px;
+}
+
+.form-group-setting label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.form-group-setting input[type="text"],
+.form-group-setting input[type="email"],
+.form-group-setting select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+.form-group-setting input:focus,
+.form-group-setting select:focus {
+    border-color: #ff7b00;
+    outline: none;
+}
+
+/* Kích thước riêng cho input màu */
+.form-group-setting input[type="color"] {
+    width: 80px;
+    height: 40px;
+    padding: 0;
+    border: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.form-group-setting small {
+    display: block;
+    margin-top: 5px;
+    color: #6c757d;
+    font-size: 13px;
+    font-style: italic;
+}
+
+.save-settings-btn {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+/* Các nút trong bảng đã được định nghĩa ở phần chung của Bảng */
